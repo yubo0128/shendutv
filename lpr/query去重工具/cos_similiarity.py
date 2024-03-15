@@ -2,8 +2,12 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from utils import *
+from ..utils import *
 
+'''
+    使用LLM将questions转为sentence embedding，用cosine_similarity计算sentence embedding的相似度，
+    相似度大于threshold的query为重复问题，输出所有不重复的问题
+'''
 def cos_sim(questions, threshold, model_name):
     # 加载预训练的sentence transformer模型
     model = SentenceTransformer(model_name)
@@ -29,6 +33,9 @@ def cos_sim(questions, threshold, model_name):
 
     return unique_questions
 
+'''
+    筛选逻辑与cos_sim一致，用于测试threshold
+'''
 def threshold_tune(thresholds, model_name, questions_file, output_file):
     questions = excel2questions(questions_file)
     df = pd.DataFrame(questions, columns=['original questions'])
@@ -58,7 +65,12 @@ if __name__ == '__main__':
     #
     # threshold_tune(thresholds, model_name, questions_file, output_file)
 
-    '''check which similar query'''
+    model_name = 'all-MiniLM-L6-v2'
+    questions_file = '../filter 测试 2024 Feb/高血压query.xlsx'
+    output_file = '../filter 测试 2024 Feb/高血压filtered.xlsx'
+    questions = excel2questions(questions_file)
+    filtered_question = cos_sim(questions, 0.96, model_name)
+    quetions2excel(filtered_question, output_file)
 
 
 
