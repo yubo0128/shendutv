@@ -18,6 +18,8 @@ letter_dic = {
 }
 sheets_name = ['element set', 'original sequences']
 fixed_heads = ['序号', 'title', '封面编号', 'XQ版本A', 'XQ版本正文']
+
+
 def read_sheets(file_path, sheets_name):
     dfs = pd.read_excel(file_path, sheet_name=sheets_name)
     return dfs
@@ -91,11 +93,18 @@ def generate_rand_seq(row, element_set, tmp_df, heads):
                 continue
 
             # find the row in element set, and random choose one, TODO: need to fix exact matching row
-            matching_rows = element_set[
-                element_set.apply(lambda row: row.astype(str).str.contains(r'\b' + value + r'\b', regex=True).any(),
-                                  axis=1)]
+            # matching_rows = element_set[
+            #     element_set.apply(lambda row: row.astype(str).str.contains(r'\b' + value + r'\b', regex=True).any(),
+            #                       axis=1)]
 
-            candidates = matching_rows.values.flatten().tolist()
+            indices = np.where(element_set.values == value)
+            # Extracting row and column indices
+            row_indices, col_indices = indices[0], indices[1]
+            if len(row_indices) == 0:
+                dict_tmp[key] = value
+                continue
+            matching_row = element_set.loc[[row_indices[0]]]
+            candidates = matching_row.values.flatten().tolist()
             if len(candidates) <= 1:
                 dict_tmp[key] = value
                 continue
@@ -150,8 +159,9 @@ def generate_new(input_file_path, output_file_path):
 
 
 if __name__ == "__main__":
-    input_file_path = '../filter 测试 2024 Feb/子宫内膜异位症XQ版本-扩增基础信息表-李慧-20240307.xlsx'
-    output_file_path = '../filter 测试 2024 Feb/子宫内膜异位症X-扩增表-刘沛然-20240311.xlsx'
+    input_file_path = '../filter 测试 2024 Feb/XQ版本（慢性）前列腺炎-扩增基础信息表-李慧-20240307.xlsx'
+    output_file_path = '../filter 测试 2024 Feb/前列腺炎-扩增表-刘沛然-20240311.xlsx'
 
     generate_new(input_file_path, output_file_path)
+
 
