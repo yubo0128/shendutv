@@ -19,11 +19,16 @@ letter_dic = {
 sheets_name = ['element set', 'original sequences']
 fixed_heads = ['序号', 'title', '封面编号', 'XQ版本A', 'XQ版本正文']
 
-
+'''
+    读取file_path.xlsx中指定的sheets
+'''
 def read_sheets(file_path, sheets_name):
     dfs = pd.read_excel(file_path, sheet_name=sheets_name)
     return dfs
 
+'''
+    检查该行中所有'模块X'包含Q版元素的个数，Q版元素少于2个时，不对该行进行生成
+'''
 def is_Q_less_2(row):
     Q_count = 0
     for column_name, value in row.items():
@@ -37,6 +42,9 @@ def is_Q_less_2(row):
         return True
     return False
 
+'''
+    检查该行共有多少'模块X'，'模块X'数量少于5时，不对改行进行生成
+'''
 def is_module_less_5(row):
     num_module = 0
     for column_name, value in row.items():
@@ -48,6 +56,10 @@ def is_module_less_5(row):
         return True
     return False
 
+
+'''
+    已包含在is_Q_less_2, 不应使用该函数
+'''
 def is_Q_equal_0(row):
     Q_count = 0
     for column_name, value in row.items():
@@ -61,7 +73,9 @@ def is_Q_equal_0(row):
         return True
     return False
 
-
+'''
+    new_df只包含一行数据，检查new_df包含的这行是否在ori_df中重复
+'''
 def is_repeat(new_df, ori_df):
     ori_df_comp = ori_df.drop(fixed_heads, axis=1)
     new_df_comp = new_df.drop(fixed_heads, axis=1)
@@ -80,6 +94,9 @@ def is_repeat(new_df, ori_df):
     return False
 
 
+'''
+    根据row的内容，从element_set中选取替换项，生成10条新的内容，并去重
+'''
 def generate_rand_seq(row, element_set, tmp_df, heads):
     i = 1
     for _ in range(10):
@@ -91,11 +108,6 @@ def generate_rand_seq(row, element_set, tmp_df, heads):
             if key in fixed_heads:
                 dict_tmp[key] = value
                 continue
-
-            # find the row in element set, and random choose one, TODO: need to fix exact matching row
-            # matching_rows = element_set[
-            #     element_set.apply(lambda row: row.astype(str).str.contains(r'\b' + value + r'\b', regex=True).any(),
-            #                       axis=1)]
 
             indices = np.where(element_set.values == value)
             # Extracting row and column indices
@@ -127,17 +139,18 @@ def generate_rand_seq(row, element_set, tmp_df, heads):
     return tmp_df
 
 
-
+'''
+    生成内容主函数
+'''
 def generate_new(input_file_path, output_file_path):
     dfs = read_sheets(input_file_path, sheets_name)
 
     element_set = dfs['element set']
     ori_sequences = dfs['original sequences']
-    # 得到第一行
     heads = ori_sequences.columns.tolist()
-    # 创建二维数据结构
+
     constructed_df = pd.DataFrame(columns=heads)
-    print(constructed_df)
+
     for index, row in ori_sequences.iterrows():
         # construct a tmp df
         tmp_df = pd.DataFrame(columns=heads)
@@ -160,8 +173,8 @@ def generate_new(input_file_path, output_file_path):
 
 
 if __name__ == "__main__":
-    input_file_path = './testData/XQ版本（慢性）前列腺炎-扩增基础信息表-李慧-20240307.xlsx'
-    output_file_path = './testData/前列腺炎-扩增表-刘沛然-20240313.xlsx'
+    input_file_path = '../filter 测试 2024 Feb/XQ版本（慢性）前列腺炎-扩增基础信息表-李慧-20240307.xlsx'
+    output_file_path = '../filter 测试 2024 Feb/前列腺炎-扩增表-刘沛然-20240311.xlsx'
 
     generate_new(input_file_path, output_file_path)
 
