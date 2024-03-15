@@ -14,9 +14,9 @@ def readData(sh):
 
 def main(data):
     db = pymysql.connect(
-        host='rm-wz9368wc7m38zp9371o.mysql.rds.aliyuncs.com',
-        user='mysql_sd_shendu20220305',
-        password='MysqlSdShendu20220305123456',
+        host='',
+        user='',
+        password='',
         db='shendu_new',
         charset='utf8mb4',
         # autocommit=True,    # 如果插入数据，， 是否自动提交? 和conn.commit()功能一致。
