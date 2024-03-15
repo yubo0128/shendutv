@@ -133,11 +133,11 @@ def generate_new(input_file_path, output_file_path):
 
     element_set = dfs['element set']
     ori_sequences = dfs['original sequences']
-    print(element_set)
+    # 得到第一行
     heads = ori_sequences.columns.tolist()
-
+    # 创建二维数据结构
     constructed_df = pd.DataFrame(columns=heads)
-
+    print(constructed_df)
     for index, row in ori_sequences.iterrows():
         # construct a tmp df
         tmp_df = pd.DataFrame(columns=heads)
