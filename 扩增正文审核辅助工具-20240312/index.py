@@ -138,7 +138,6 @@ def main(sh, arr):
                 bs = ''.join(ss)
                 print("1111111")
                 print(bs)
-                print("------------______2222___--------")
                 i['b'] = bs
             else:
                 print("进入进入进入进入进入进入2222222222222")
@@ -163,9 +162,7 @@ def main(sh, arr):
                 ss = list(bs)
                 ss.insert(int(len(a[0])), '\n')  # 在索引5的位置插入一个空格
                 bs = ''.join(ss)
-                print("1111111")
                 print(bs)
-                print("------------______2222___--------")
                 i['b'] = bs
                 print("8888888888888888888888888")
             else:
@@ -202,14 +199,13 @@ def main(sh, arr):
 # print(arr)
 # exit()
 # 导出和飘红
-def output(arr):
+def output(arr, output_name):
     # 创建工作簿对象
     workbook = openpyxl.Workbook()
     # 选取默认的活动表格（sheet）
     sheet = workbook.active
-    filename = "output.xlsx"
-    workbook.save(filename)
-    workbook = xlsxwriter.Workbook(filename)
+    workbook.save(output_name)
+    workbook = xlsxwriter.Workbook(output_name)
     worksheet = workbook.add_worksheet()
 
     # 定义格式
@@ -272,6 +268,6 @@ if __name__ == '__main__':
     arr = []
     # 处理数据
     main(sh, arr)
-    # 导出数据
-    output(arr)
+    # 导出数据 参数一数据 参数二是导出文件名称
+    output(arr, "output.xlsx")
 
