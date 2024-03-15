@@ -69,7 +69,7 @@ def main(sh, arr):
                     print(n)
                     print("-------ssss---")
                 else:  # 不带一二三的情况
-                    sub_str = s[int(i) + 2:i + 15]
+                    sub_str = s[int(i):i + 15]
                     print("查询出2222222")
                     print(sub_str)
                     sp = sub_str.split("。")
@@ -85,8 +85,12 @@ def main(sh, arr):
                     if sub_str in n:
                         wz = n.index(sub_str)
                         character = n[0:wz]
-                        if len(character.split("\n")) != 1:
+                        print("输出：")
+                        character_list = [s for s in character.split("\n") if s]
+                        print(character_list)
+                        if len(character_list) != 1:
                             wz = wz-2
+                        print(wz)
                         print("-------")
                         print(n[0:wz])
                         print("-------")
@@ -261,7 +265,7 @@ def output(arr):
 
 if __name__ == '__main__':
     # 全数据测试
-    # wb = openpyxl.load_workbook("./工作簿5.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/子宫肌瘤-扩增XQ版本拼接+正文-1037条20240313.xlsx")
     # 部分数据测试
     wb = openpyxl.load_workbook("./工作簿115.xlsx")
     sh = wb.worksheets[0]
