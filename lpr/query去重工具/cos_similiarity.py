@@ -7,6 +7,12 @@ from ..utils import *
 '''
     使用LLM将questions转为sentence embedding，用cosine_similarity计算sentence embedding的相似度，
     相似度大于threshold的query为重复问题，输出所有不重复的问题
+    
+    @:param questions: list of strings
+    @:param threshold: float [0, 1]
+    @:param model_name: string (model in SentenceTransformer pkg)
+    
+    @:return: list of unique questions
 '''
 def cos_sim(questions, threshold, model_name):
     # 加载预训练的sentence transformer模型
@@ -35,6 +41,13 @@ def cos_sim(questions, threshold, model_name):
 
 '''
     筛选逻辑与cos_sim一致，用于测试threshold
+    
+    @:param thresholds: list of float in [0, 1]
+    @:param model_name: string (model in SentenceTransformer pkg)
+    @:param questions_file: string, file name that contains questions to be filtered
+    @:param output_file: string, file name that you want unique questions to be saved
+    
+    @:return: None
 '''
 def threshold_tune(thresholds, model_name, questions_file, output_file):
     questions = excel2questions(questions_file)
