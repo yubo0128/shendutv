@@ -21,6 +21,11 @@ fixed_heads = ['序号', 'title', '封面编号', 'XQ版本A', 'XQ版本正文']
 
 '''
     读取file_path.xlsx中指定的sheets
+    
+    @:param file_path: string
+    @:param sheets_name: list of strings
+    
+    @:return: list of DataFrame
 '''
 def read_sheets(file_path, sheets_name):
     dfs = pd.read_excel(file_path, sheet_name=sheets_name)
@@ -28,6 +33,10 @@ def read_sheets(file_path, sheets_name):
 
 '''
     检查该行中所有'模块X'包含Q版元素的个数，Q版元素少于2个时，不对该行进行生成
+    
+    @:param row: Series (one row of DataFrame)
+    
+    @:return: bool
 '''
 def is_Q_less_2(row):
     Q_count = 0
@@ -44,6 +53,9 @@ def is_Q_less_2(row):
 
 '''
     检查该行共有多少'模块X'，'模块X'数量少于5时，不对改行进行生成
+    
+    @:param row: Series (one row of DataFrame)
+    @:return: bool
 '''
 def is_module_less_5(row):
     num_module = 0
@@ -59,6 +71,9 @@ def is_module_less_5(row):
 
 '''
     已包含在is_Q_less_2, 不应使用该函数
+    
+    @:param row: Series (one row of DataFrame)
+    @:return: bool
 '''
 def is_Q_equal_0(row):
     Q_count = 0
@@ -75,6 +90,11 @@ def is_Q_equal_0(row):
 
 '''
     new_df只包含一行数据，检查new_df包含的这行是否在ori_df中重复
+    
+    @:param new_df: DataFrame contains only one row
+    @:param ori_df: DataFrame
+    
+    @:return: bool, true if repreated
 '''
 def is_repeat(new_df, ori_df):
     ori_df_comp = ori_df.drop(fixed_heads, axis=1)
@@ -96,6 +116,13 @@ def is_repeat(new_df, ori_df):
 
 '''
     根据row的内容，从element_set中选取替换项，生成10条新的内容，并去重
+    
+    @:param row: Series, generate contain based on this row
+    @:param element_set: DataFrame, 包含所有替换项
+    @:param tmp_df: DataFrame, 用来查重
+    @:param heads: list of string, 包含row的所有column name
+    
+    @:return tmp_df: 随机生成的不重复序列
 '''
 def generate_rand_seq(row, element_set, tmp_df, heads):
     i = 1
@@ -141,6 +168,11 @@ def generate_rand_seq(row, element_set, tmp_df, heads):
 
 '''
     生成内容主函数
+    
+    @:param input_file_path: string
+    @:param output_file_path: string
+    
+    @:return: None, save to output_file_path
 '''
 def generate_new(input_file_path, output_file_path):
     dfs = read_sheets(input_file_path, sheets_name)
