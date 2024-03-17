@@ -9,8 +9,12 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 # 定义常量
 BASIC_DATA = ["一、", "二、", "三、", "四、", "五、", "六、", "七、", "八、", "九、", "十、"]
 
-# 返回比较的值
-# 1.0 是全匹配  0 是全不匹配
+'''
+    返回比较的值
+    @:param str1: str, 比较值一
+    @:param str2: str, 比较值二
+    @:return  随机生成的不重复序列返回1.0 是全匹配  0 是全不匹配
+'''
 def jaccard_similarity(str1, str2):
     set1 = set(str1)
     set2 = set(str2)
@@ -19,7 +23,12 @@ def jaccard_similarity(str1, str2):
     return intersection / union
 
 
-# 计算数据
+'''
+    返回截取的数据
+    @:param c: str, 截取的数据
+    @:param string: BASIC_DATA, 常量
+    @:return  随机生成的不重复序列返回1.0 是全匹配  0 是全不匹配
+'''
 def computes(c, string):
     rag = 0
     out = c[0:2]
@@ -33,6 +42,11 @@ def computes(c, string):
     return couA
 
 
+'''
+    @:param sh 读取的第一个表格
+    @:param arr: list, 声明的空列表
+    @:return  无
+'''
 # 处理数据
 def main(sh, arr):
     # 读取excel并组装数据
@@ -196,9 +210,11 @@ def main(sh, arr):
         item["b"] = "\n".join(b)
 
 
-# print(arr)
-# exit()
+'''
 # 导出和飘红
+@:param arr: list, s数据
+@:param output_name 导出的局对路径
+'''
 def output(arr, output_name):
     # 创建工作簿对象
     workbook = openpyxl.Workbook()
