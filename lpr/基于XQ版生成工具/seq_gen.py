@@ -205,8 +205,8 @@ def generate_new(input_file_path, output_file_path):
 
 
 if __name__ == "__main__":
-    input_file_path = '../filter 测试 2024 Feb/XQ版本（慢性）前列腺炎-扩增基础信息表-李慧-20240307.xlsx'
-    output_file_path = '../filter 测试 2024 Feb/前列腺炎-扩增表-刘沛然-20240311.xlsx'
+    input_file_path = '../testData/XQ版本（慢性）前列腺炎-扩增基础信息表-李慧-20240307.xlsx'
+    output_file_path = '../testData/20240318.xlsx'
 
     generate_new(input_file_path, output_file_path)
 

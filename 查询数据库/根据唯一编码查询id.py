@@ -1,7 +1,9 @@
 from pypinyin import lazy_pinyin, Style
 import time, os, json, pymysql, openpyxl
 
-
+'''
+数据合并
+'''
 def readData(sh):
     dataList = []
     for cases in list(sh.rows)[1:]:
@@ -11,7 +13,9 @@ def readData(sh):
                     ])
     return dataList
 
-
+'''
+数据查询
+'''
 def main(data):
     db = pymysql.connect(
         host='',
