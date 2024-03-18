@@ -278,7 +278,7 @@ def output(arr, output_name):
 if __name__ == '__main__':
     # 全数据测试
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/多囊卵巢综合征-XQ版扩增拼接+正文-361条-20240313.xlsx")
-    wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/ws/前列腺炎-XQ版扩增拼接+正文-1593-20240315.xlsx")
+    wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/多囊卵巢综合征-XQ版扩增拼接+正文-361条-20240318.xlsx")
     # 部分数据测试
     # wb = openpyxl.load_workbook("./工作簿115.xlsx")
     sh = wb.worksheets[0]
