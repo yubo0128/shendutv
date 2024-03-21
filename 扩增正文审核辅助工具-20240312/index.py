@@ -171,19 +171,23 @@ def main(sh, arr):
                 deep_copy_list = copy.deepcopy(aa)
                 cou_a = computes(deep_copy_list, BASIC_DATA)
                 cou_b = computes(b[i], BASIC_DATA)
-                if jaccard_similarity(cou_a, cou_b) > 0.70:
+                # 这里调小了会造成数据前面匹配上了一、 二、 三、的情况
+                if jaccard_similarity(cou_a, cou_b) > 0.75 and i < 0:
                     sindex = aa[0:2]
                     if sindex in BASIC_DATA:
                         if sindex in b[i]:
                             b[i] = b[i]
                         else:
+                            print("输出一二三的情况")
                             b[i] = sindex + b[i]
+
         '''
         新增功能如果遇到任意一句就取消前面换行
+        1、修复匹配值不正确问题
         '''
         for i in range(0, len(b)):
             for v in MATCHED_VALUE:
-                if v in b[i]:
+                if v == b[i]:
                     if i > 0:
                         b[i-1] = b[i-1] + b[i]
                         b[i] = ""
@@ -191,8 +195,10 @@ def main(sh, arr):
             #     if i > 0:
             #         b[i-1] = b[i-1] + b[i]
             #         b[i] = ""
-        item["b"] = "\n".join([s for s in b if s])
 
+        item["b"] = "\n".join([s for s in b if s])
+        print("bbbb")
+        print(item["b"])
 '''
 # 导出和飘红
 @:param arr: list, s数据
@@ -258,12 +264,12 @@ if __name__ == '__main__':
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/多囊卵巢综合征-XQ版扩增拼接+正文-361条-20240313.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/多囊卵巢综合征-XQ版扩增拼接+正文-361条-20240318.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/阴道炎XQ扩展版拼接+正文-195条-20240319.xlsx")
-    wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/盆腔炎XQ扩增版本拼接+正文-1328条-20240319.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/盆腔炎XQ扩增版本拼接+正文-1328条-20240319.xlsx")
     # 部分数据测试
-    # wb = openpyxl.load_workbook("./工作簿115.xlsx")
+    wb = openpyxl.load_workbook("./工作簿115.xlsx")
     sh = wb.worksheets[0]
     arr = []
     # 处理数据
     main(sh, arr)
     # 导出数据 参数一数据 参数二是导出文件名称
-    output(arr, "盆腔炎XQ扩增版本拼接+正文-1328条-20240319.xlsx")
+    output(arr, "1111.xlsx")
