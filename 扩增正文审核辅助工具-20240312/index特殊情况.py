@@ -44,19 +44,26 @@ def computes(c, string):
     out = c[0:2]
     if out in string:
         rag = 2
-    if len(c) > 15:
-        couA = c[rag:15]
+    if len(c) > 30:
+        couA = c[rag:len(c)]
     else:
         couA = c[rag:10]
     return couA
 
+'''
+根据value获取key值
+'''
+def getKey(value):
+    # 根据BASIC_DATA获取key
+    for i in range(len(BASIC_DATA)):
+        if BASIC_DATA[i] == value:
+            return i
 
 '''
     @:param sh 读取的第一个表格
     @:param arr: list, 声明的空列表
     @:return  无
 '''
-
 
 # 处理数据
 def main(sh, arr):
@@ -165,12 +172,29 @@ def main(sh, arr):
     for item in arr:
         a = item["a"].split("\n")
         b = item["b"].split("\n")
+        index = 0
+        amax = None
+        amaxIndex = 1
+        bmax = None
+        bmaxIndex = 0
         for aa in a:
+            for pp in BASIC_DATA:
+                if pp in aa:
+                    print("vvvvc"+pp)
+                    amax = pp
+                    amaxIndex = amaxIndex + 1
             for i in range(0, len(b)):
                 # 截取后面10个字符或者15个字符超过95% 就加编号
-                deep_copy_list = copy.deepcopy(aa)
+                if len(aa) > 10:
+                    deep_copy_list = copy.deepcopy(aa)
+                else:
+                    print("执行合并小于十个字符的")
+                    deep_copy_list = copy.deepcopy(aa + a[index + 1])
                 cou_a = computes(deep_copy_list, BASIC_DATA)
                 cou_b = computes(b[i], BASIC_DATA)
+                print("打印出值AAAA" + cou_a)
+                print("打印出值BBBB" + cou_b)
+                print("打印出匹配的值" + str(jaccard_similarity(cou_a, cou_b)))
                 # 这里调小了会造成数据前面匹配上了一、 二、 三、的情况
                 if jaccard_similarity(cou_a, cou_b) > 0.75 and i > 0:
                     sindex = aa[0:2]
@@ -180,25 +204,71 @@ def main(sh, arr):
                         else:
                             print("输出一二三的情况")
                             b[i] = sindex + b[i]
+            index = index + 1
 
         '''
         新增功能如果遇到任意一句就取消前面换行
         1、修复匹配值不正确问题
         '''
         for i in range(0, len(b)):
+            for pp in BASIC_DATA:
+                if pp in b[i]:
+                    print("111111"+ str(bmaxIndex))
+                    bmax = pp
+                    bmaxIndex = bmaxIndex + 1
             for v in MATCHED_VALUE:
                 if v == b[i]:
                     if i > 0:
-                        b[i-1] = b[i-1] + b[i]
+                        b[i - 1] = b[i - 1] + b[i]
                         b[i] = ""
             # if b[i] in MATCHED_VALUE:
             #     if i > 0:
             #         b[i-1] = b[i-1] + b[i]
             #         b[i] = ""
+        print("A最大值" + str(amax))
+        print("B最大值" + str(bmax))
+        print("A最大值11" + str(amaxIndex))
+        print("B最大值22" + str(bmaxIndex))
+        if amaxIndex is not None and bmaxIndex is not None:
+            if amaxIndex == bmaxIndex or amaxIndex > bmaxIndex:
+                print("121232131313131")
+                # 处理相同的情况加一、二、三、
+                keyIndex = getKey(amax)
+                ki = keyIndex
+                for key in range(amaxIndex, 0, -1):
+                    if (key - 2) >= 0:
+                        if BASIC_DATA[ki] not in b[key]:
+                            print("不包含")
+                            print(BASIC_DATA[ki] + b[key])
+                            b[key] = BASIC_DATA[ki] + b[key]
+                        ki = ki - 1
+            # if amaxIndex > bmaxIndex:
+            #     # 处理A最大值大于B最大值
+            #     for key in range(bmaxIndex, amaxIndex):
+            #         print("A多出:" + str(key))
+            #         if key > 0:
+            #             if BASIC_DATA[key - 1] not in b[key]:
+            #                 print("不包含")
+            #                 b[key] = BASIC_DATA[key - 1] + b[key]
+            elif amaxIndex < bmaxIndex:
+                print("小于的情况")
+                # # 用A来定义一、二、三、的情况
+                # indexKe = None
+                # for key in range(0, bmaxIndex):
+                #     if bmax in BASIC_DATA:
+                #         indexKe = key
+                # if bmax == "二、":
+                #     b[indexKe + 1] = "三、" + b[indexKe + 1]
+                #     print(b[indexKe+1])
+                #     print("在key的位置"+ str(indexKe))
+
 
         item["b"] = "\n".join([s for s in b if s])
         print("bbbb")
         print(item["b"])
+
+
+
 '''
 # 导出和飘红
 @:param arr: list, s数据
@@ -265,7 +335,7 @@ if __name__ == '__main__':
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/多囊卵巢综合征-XQ版扩增拼接+正文-361条-20240318.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/阴道炎XQ扩展版拼接+正文-195条-20240319.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/盆腔炎XQ扩增版本拼接+正文-1328条-20240319.xlsx")
-    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240326/肾结石扩增版拼接+正文-1146条-20240326.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240326/尿道炎XQ扩展版-拼接+正文605条-20240326.xlsx")
     # 部分数据测试
     wb = openpyxl.load_workbook("./工作簿115.xlsx")
     sh = wb.worksheets[0]
@@ -273,4 +343,4 @@ if __name__ == '__main__':
     # 处理数据
     main(sh, arr)
     # 导出数据 参数一数据 参数二是导出文件名称
-    output(arr, "测试.xlsx")
+    output(arr, "2223.xlsx")
