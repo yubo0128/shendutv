@@ -13,7 +13,8 @@ MATCHED_VALUE = ["如发现以上症状，应及时去正规医院就医，以�
                  "一旦确诊，应积极配合医生治疗，遵医嘱，按疗程，科学治，以免病情加重。",
                  "远离这些因素，养成良好的生活习惯，健康的生活方式是健康最有力的保障。",
                  "特别提醒，要到正规医院就医，切勿相信偏方，小广告等，以免错过治疗时机。",
-                 "治疗期间要相信医生，不恐惧，不焦虑，不迷信，科学治疗和良好心态是治疗成功的有力保障。"]
+                 "治疗期间要相信医生，不恐惧，不焦虑，不迷信，科学治疗和良好心态是治疗成功的有力保障。",
+                 "诊断疾病请去正规医院，进行科学的检查，早确诊，早治疗。"]
 
 '''
     返回比较的值
@@ -174,15 +175,20 @@ def main(sh, arr):
         b = item["b"].split("\n")
         index = 0
         amax = None
-        amaxIndex = 1
+        amaxIndex = 0
+        amaxIndexNumber = 0
         bmax = None
         bmaxIndex = 0
+
         for aa in a:
             for pp in BASIC_DATA:
                 if pp in aa:
                     print("vvvvc"+pp)
                     amax = pp
                     amaxIndex = amaxIndex + 1
+                    # 得到行号A的行号
+                    print("得到第几行"+ str(index))
+                    amaxIndexNumber = index
             for i in range(0, len(b)):
                 # 截取后面10个字符或者15个字符超过95% 就加编号
                 if len(aa) > 10:
@@ -229,19 +235,46 @@ def main(sh, arr):
         print("B最大值" + str(bmax))
         print("A最大值11" + str(amaxIndex))
         print("B最大值22" + str(bmaxIndex))
-        if amaxIndex is not None and bmaxIndex is not None:
-            if amaxIndex == bmaxIndex or amaxIndex > bmaxIndex:
-                print("121232131313131")
-                # 处理相同的情况加一、二、三、
-                keyIndex = getKey(amax)
-                ki = keyIndex
-                for key in range(amaxIndex, 0, -1):
-                    if (key - 2) >= 0:
-                        if BASIC_DATA[ki] not in b[key]:
-                            print("不包含")
-                            print(BASIC_DATA[ki] + b[key])
-                            b[key] = BASIC_DATA[ki] + b[key]
-                        ki = ki - 1
+        print("A得到a的行号"+ str(amaxIndexNumber))
+        if len(a) == len(b):
+            keyIndex = getKey(amax)
+            print("得到Key"+str(keyIndex))
+            for key in range(amaxIndexNumber, 0, -1):
+                if keyIndex < 0:
+                    break
+                print("测试测试"+b[key][0:2])
+                print("得到Key"+ b[key])
+                index_index = BASIC_DATA[keyIndex]
+                if index_index not in b[key][0:2]:
+                    b[key] = BASIC_DATA[keyIndex] + b[key]
+                    print("1111")
+                    print(BASIC_DATA[keyIndex])
+                    print("1111")
+                keyIndex = keyIndex - 1
+        elif len(a) > len(b):
+            print("A大于B")
+        elif len(a) < len(b):
+            print("A小于B")
+
+            # maxkey = 0
+            # basicKey = 0
+            # for k in range(0, len(b)):
+
+            # print("打印出最大值" + str(maxkey))
+            # print("打印出最大值1111" + str(basicKey))
+        # if amaxIndex is not None and bmaxIndex is not None:
+        #     if amaxIndex == bmaxIndex or amaxIndex > bmaxIndex:
+        #         print("121232131313131")
+        #         # 处理相同的情况加一、二、三、
+        #         keyIndex = getKey(amax)
+        #         ki = keyIndex
+        #         for key in range(amaxIndex, 0, -1):
+        #             if (key - 2) >= 0:
+        #                 if BASIC_DATA[ki] not in b[key]:
+        #                     print("不包含")
+        #                     print(BASIC_DATA[ki] + b[key])
+        #                     b[key] = BASIC_DATA[ki] + b[key]
+        #                 ki = ki - 1
             # if amaxIndex > bmaxIndex:
             #     # 处理A最大值大于B最大值
             #     for key in range(bmaxIndex, amaxIndex):
@@ -250,8 +283,8 @@ def main(sh, arr):
             #             if BASIC_DATA[key - 1] not in b[key]:
             #                 print("不包含")
             #                 b[key] = BASIC_DATA[key - 1] + b[key]
-            elif amaxIndex < bmaxIndex:
-                print("小于的情况")
+            # elif amaxIndex < bmaxIndex:
+            #     print("小于的情况")
                 # # 用A来定义一、二、三、的情况
                 # indexKe = None
                 # for key in range(0, bmaxIndex):
@@ -336,11 +369,12 @@ if __name__ == '__main__':
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/阴道炎XQ扩展版拼接+正文-195条-20240319.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/盆腔炎XQ扩增版本拼接+正文-1328条-20240319.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240326/尿道炎XQ扩展版-拼接+正文605条-20240326.xlsx")
+    wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240402/艾滋病XQ扩增版本拼接+正文-521-余波-20240402.xlsx")
     # 部分数据测试
-    wb = openpyxl.load_workbook("./工作簿115.xlsx")
+    # wb = openpyxl.load_workbook("./工作簿115.xlsx")
     sh = wb.worksheets[0]
     arr = []
     # 处理数据
     main(sh, arr)
     # 导出数据 参数一数据 参数二是导出文件名称
-    output(arr, "2223.xlsx")
+    output(arr, "22222.xlsx")
