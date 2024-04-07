@@ -13,7 +13,8 @@ MATCHED_VALUE = ["如发现以上症状，应及时去正规医院就医，以�
                  "一旦确诊，应积极配合医生治疗，遵医嘱，按疗程，科学治，以免病情加重。",
                  "远离这些因素，养成良好的生活习惯，健康的生活方式是健康最有力的保障。",
                  "特别提醒，要到正规医院就医，切勿相信偏方，小广告等，以免错过治疗时机。",
-                 "治疗期间要相信医生，不恐惧，不焦虑，不迷信，科学治疗和良好心态是治疗成功的有力保障。"]
+                 "治疗期间要相信医生，不恐惧，不焦虑，不迷信，科学治疗和良好心态是治疗成功的有力保障。",
+                 "诊断疾病请去正规医院，进行科学的检查，早确诊，早治疗。"]
 
 '''
     返回比较的值
@@ -266,6 +267,8 @@ if __name__ == '__main__':
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/阴道炎XQ扩展版拼接+正文-195条-20240319.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/盆腔炎XQ扩增版本拼接+正文-1328条-20240319.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240326/肾结石扩增版拼接+正文-1146条-20240326.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240328/带状疱疹扩增版拼接+正文617条-20240328.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240402/艾滋病XQ扩增版本拼接+正文-521-余波-20240402.xlsx")
     # 部分数据测试
     wb = openpyxl.load_workbook("./工作簿115.xlsx")
     sh = wb.worksheets[0]
@@ -273,4 +276,4 @@ if __name__ == '__main__':
     # 处理数据
     main(sh, arr)
     # 导出数据 参数一数据 参数二是导出文件名称
-    output(arr, "测试.xlsx")
+    output(arr, "1111.xlsx")
