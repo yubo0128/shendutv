@@ -2,6 +2,7 @@ import xlsxwriter
 import openpyxl
 import copy
 import logging
+import re
 
 # 配置日志记录
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -51,14 +52,30 @@ def computes(c, string):
         couA = c[rag:10]
     return couA
 
+
+def computes2(c, string):
+    rag = 0
+    out = c[0:2]
+    if out in string:
+        rag = 2
+    if len(c) > 15:
+        couA = c[rag:15]
+    else:
+        couA = c[rag:10]
+    return couA
+
+
 '''
 根据value获取key值
 '''
+
+
 def getKey(value):
     # 根据BASIC_DATA获取key
     for i in range(len(BASIC_DATA)):
         if BASIC_DATA[i] == value:
             return i
+
 
 '''
     @:param sh 读取的第一个表格
@@ -66,12 +83,14 @@ def getKey(value):
     @:return  无
 '''
 
+
 # 处理数据
 def main(sh, arr):
     # 读取excel并组装数据
     for cases in list(sh.rows)[1:]:
         a = cases[4].value
         b = cases[5].value
+        b = b.replace("^l", "").replace("^l", "").replace("^l", "")
         # print(b)
         # 把数据转换成A（左列）和B（右列）
         arr.append({
@@ -179,15 +198,15 @@ def main(sh, arr):
         amaxIndexNumber = 0
         bmax = None
         bmaxIndex = 0
-
+        bmaxIndexNumber = 0
         for aa in a:
             for pp in BASIC_DATA:
                 if pp in aa:
-                    print("vvvvc"+pp)
+                    print("vvvvc" + pp)
                     amax = pp
                     amaxIndex = amaxIndex + 1
                     # 得到行号A的行号
-                    print("得到第几行"+ str(index))
+                    print("得到第几行" + str(index))
                     amaxIndexNumber = index
             for i in range(0, len(b)):
                 # 截取后面10个字符或者15个字符超过95% 就加编号
@@ -202,14 +221,31 @@ def main(sh, arr):
                 print("打印出值BBBB" + cou_b)
                 print("打印出匹配的值" + str(jaccard_similarity(cou_a, cou_b)))
                 # 这里调小了会造成数据前面匹配上了一、 二、 三、的情况
-                if jaccard_similarity(cou_a, cou_b) > 0.75 and i > 0:
-                    sindex = aa[0:2]
-                    if sindex in BASIC_DATA:
-                        if sindex in b[i]:
-                            b[i] = b[i]
-                        else:
-                            print("输出一二三的情况")
-                            b[i] = sindex + b[i]
+
+                cou_a_2 = computes2(deep_copy_list, BASIC_DATA)
+                cou_b_2 = computes2(b[i], BASIC_DATA)
+                p = False
+                # 这里需要验证一下开头两位是否存在一二三编码的情况 如果不存在才执行
+                sindex = aa[0:2]
+                bindex = b[i][0:2]
+                rbh = ",".join(BASIC_DATA)
+                if bindex not in rbh:
+                    if (jaccard_similarity(cou_a, cou_b) > 0.75) and i > 0:
+                        p = True
+                        if sindex in BASIC_DATA:
+                            if sindex in b[i]:
+                                b[i] = b[i]
+                            else:
+                                print("输出一二三的情况")
+                                b[i] = sindex + b[i]
+                    if p == False and jaccard_similarity(cou_a_2, cou_b_2) > 0.75 and i > 0:
+                        if sindex in BASIC_DATA:
+                            if sindex in b[i]:
+                                b[i] = b[i]
+                            else:
+                                print("输出一二三的情况")
+                                b[i] = sindex + b[i]
+
             index = index + 1
 
         '''
@@ -219,9 +255,10 @@ def main(sh, arr):
         for i in range(0, len(b)):
             for pp in BASIC_DATA:
                 if pp in b[i]:
-                    print("111111"+ str(bmaxIndex))
+                    print("111111" + str(bmaxIndex))
                     bmax = pp
                     bmaxIndex = bmaxIndex + 1
+                    bmaxIndexNumber = i
             for v in MATCHED_VALUE:
                 if v == b[i]:
                     if i > 0:
@@ -235,71 +272,64 @@ def main(sh, arr):
         print("B最大值" + str(bmax))
         print("A最大值11" + str(amaxIndex))
         print("B最大值22" + str(bmaxIndex))
-        print("A得到a的行号"+ str(amaxIndexNumber))
-        if len(a) == len(b):
-            keyIndex = getKey(amax)
-            print("得到Key"+str(keyIndex))
-            for key in range(amaxIndexNumber, 0, -1):
-                if keyIndex < 0:
-                    break
-                print("测试测试"+b[key][0:2])
-                print("得到Key"+ b[key])
-                index_index = BASIC_DATA[keyIndex]
-                if index_index not in b[key][0:2]:
-                    b[key] = BASIC_DATA[keyIndex] + b[key]
-                    print("1111")
-                    print(BASIC_DATA[keyIndex])
-                    print("1111")
-                keyIndex = keyIndex - 1
-        elif len(a) > len(b):
-            print("A大于B")
-        elif len(a) < len(b):
-            print("A小于B")
+        print("A得到a的行号" + str(amaxIndexNumber))
+        print("B得到b的行号" + str(bmaxIndexNumber))
+        # if len(a) == len(b):
+        #     keyIndex = getKey(amax)
+        #     print("得到Key" + str(keyIndex))
+        #     for key in range(amaxIndexNumber, 0, -1):
+        #         if keyIndex < 0:
+        #             break
+        #         print("测试测试" + b[key][0:2])
+        #         print("得到Key" + b[key])
+        #         index_index = BASIC_DATA[keyIndex]
+        #         if index_index not in b[key][0:2] and BASIC_DATA[keyIndex + 1] not in b[key][0:2] and BASIC_DATA[
+        #             keyIndex - 1] not in b[key][0:2]:
+        #             print("得到Key111" + b[key])
+        #             b[key] = BASIC_DATA[keyIndex] + b[key]
+        #             print("1111")
+        #             print(BASIC_DATA[keyIndex])
+        #             print("1111")
+        #         keyIndex = keyIndex - 1
+        # 先从最大值往前遍历
+        keyIndex = getKey(bmax)
+        for key in range(bmaxIndexNumber + 1, 0, -1):
+            print("测试测试" + str(key - 1))
+            if keyIndex == None or keyIndex < 0:
+                break
+            print("得到字符" + str(keyIndex))
+            print("得到字符" + BASIC_DATA[keyIndex])
+            print(b[key - 1])
+            index_index = BASIC_DATA[keyIndex]
+            print("AAAAAAAAA")
+            jieQu = b[key - 1][0:2]
+            print(BASIC_DATA[keyIndex + 1])
+            print(BASIC_DATA[keyIndex - 1])
+            print("AAAAAAAAA")
+            if index_index not in jieQu and BASIC_DATA[keyIndex + 1] not in jieQu and BASIC_DATA[
+                keyIndex - 1] not in jieQu:
+                b[key - 1] = BASIC_DATA[keyIndex] + b[key - 1]
+            keyIndex = keyIndex - 1
 
-            # maxkey = 0
-            # basicKey = 0
-            # for k in range(0, len(b)):
-
-            # print("打印出最大值" + str(maxkey))
-            # print("打印出最大值1111" + str(basicKey))
-        # if amaxIndex is not None and bmaxIndex is not None:
-        #     if amaxIndex == bmaxIndex or amaxIndex > bmaxIndex:
-        #         print("121232131313131")
-        #         # 处理相同的情况加一、二、三、
-        #         keyIndex = getKey(amax)
-        #         ki = keyIndex
-        #         for key in range(amaxIndex, 0, -1):
-        #             if (key - 2) >= 0:
-        #                 if BASIC_DATA[ki] not in b[key]:
-        #                     print("不包含")
-        #                     print(BASIC_DATA[ki] + b[key])
-        #                     b[key] = BASIC_DATA[ki] + b[key]
-        #                 ki = ki - 1
-            # if amaxIndex > bmaxIndex:
-            #     # 处理A最大值大于B最大值
-            #     for key in range(bmaxIndex, amaxIndex):
-            #         print("A多出:" + str(key))
-            #         if key > 0:
-            #             if BASIC_DATA[key - 1] not in b[key]:
-            #                 print("不包含")
-            #                 b[key] = BASIC_DATA[key - 1] + b[key]
-            # elif amaxIndex < bmaxIndex:
-            #     print("小于的情况")
-                # # 用A来定义一、二、三、的情况
-                # indexKe = None
-                # for key in range(0, bmaxIndex):
-                #     if bmax in BASIC_DATA:
-                #         indexKe = key
-                # if bmax == "二、":
-                #     b[indexKe + 1] = "三、" + b[indexKe + 1]
-                #     print(b[indexKe+1])
-                #     print("在key的位置"+ str(indexKe))
-
-
+        # 处理左边的序号大于右边的序号就要在右边加
+        if amax != bmax and amax is not None and bmax is not None:
+            # 获取到得到A的最大值
+            Aindex = getKey(amax)
+            Bindex = getKey(bmax)
+            print("A最大值" + str(Aindex))
+            print("B最大值" + str(Bindex))
+            compute = Aindex - Bindex
+            print("相差多少为" + str(compute))
+            if compute > 0:
+                ljj = 1
+                for i in range(Bindex + 1, Aindex + 1):
+                    print(b[bmaxIndexNumber + ljj])
+                    print("大于0" + BASIC_DATA[i])
+                    b[bmaxIndexNumber + +ljj] = BASIC_DATA[i] + b[bmaxIndexNumber + +ljj]
+                    ljj = ljj + 1
         item["b"] = "\n".join([s for s in b if s])
         print("bbbb")
         print(item["b"])
-
 
 
 '''
@@ -369,12 +399,18 @@ if __name__ == '__main__':
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/阴道炎XQ扩展版拼接+正文-195条-20240319.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240319/盆腔炎XQ扩增版本拼接+正文-1328条-20240319.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240326/尿道炎XQ扩展版-拼接+正文605条-20240326.xlsx")
-    wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240402/艾滋病XQ扩增版本拼接+正文-521-余波-20240402.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240402/艾滋病XQ扩增版本拼接+正文-521-余波-20240402.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240407/湿疹-XQ扩增版拼接+正文-867条-20240407.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240407/白癜风XQ扩增版拼接+正文-452-余波-20240407.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240407/痤疮XQ扩增版拼接+正文-196条-余波-20240407.xlsx")
+    # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240407/带状疱疹扩增版拼接+正文617条-余波-20240407.xlsx")
     # 部分数据测试
-    # wb = openpyxl.load_workbook("./工作簿115.xlsx")
+    wb = openpyxl.load_workbook("./工作簿115.xlsx")
     sh = wb.worksheets[0]
     arr = []
     # 处理数据
     main(sh, arr)
     # 导出数据 参数一数据 参数二是导出文件名称
-    output(arr, "22222.xlsx")
+    # output(arr, "痤疮XQ扩增版拼接+正文-196条-余波-20240408.xlsx")
+    output(arr, "测试.xlsx")
+    # output(arr, "带状疱疹扩增版拼接+正文617条-余波-20240408.xlsx")
