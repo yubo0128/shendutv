@@ -25,3 +25,12 @@ url = "http://online-hc.shendutv.com/prod-api/sdgather/answer/answer-list/BJXQGY
 response = requests.request("GET", url, data=payload)
 data = json.loads(response.text)
 print(data['data'])
+
+
+'''
+三、查询所有疾病模块接口
+'''
+url = "http://online-hc.shendutv.com/prod-api/sdgather/answer/answer-list-all"
+response = requests.request("GET", url, data=payload)
+data = json.loads(response.text)
+print(data['data'])
