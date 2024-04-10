@@ -404,13 +404,14 @@ if __name__ == '__main__':
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240407/白癜风XQ扩增版拼接+正文-452-余波-20240407.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240407/痤疮XQ扩增版拼接+正文-196条-余波-20240407.xlsx")
     # wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240407/带状疱疹扩增版拼接+正文617条-余波-20240407.xlsx")
+    wb = openpyxl.load_workbook("/Users/yubo/Desktop/未命名文件夹/20240410/淋病XQ扩增版拼接+正文-182条-余波-20240410.xlsx")
     # 部分数据测试
-    wb = openpyxl.load_workbook("./工作簿115.xlsx")
+    # wb = openpyxl.load_workbook("./工作簿115.xlsx")
     sh = wb.worksheets[0]
     arr = []
     # 处理数据
     main(sh, arr)
     # 导出数据 参数一数据 参数二是导出文件名称
     # output(arr, "痤疮XQ扩增版拼接+正文-196条-余波-20240408.xlsx")
-    output(arr, "测试.xlsx")
-    # output(arr, "带状疱疹扩增版拼接+正文617条-余波-20240408.xlsx")
+    # output(arr, "测试.xlsx")
+    output(arr, "淋病XQ扩增版拼接+正文-182条-余波-20240410.xlsx")
