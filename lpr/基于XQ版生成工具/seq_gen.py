@@ -18,7 +18,7 @@ letter_dic = {
 }
 sheets_name = ['element set', 'original sequences']
 fixed_heads = ['序号', 'title', '封面编号', 'XQ版本A', 'XQ版本正文']
-
+problem_arrs = [['9', 'Q99'], ['Q9', '99'], ['99', 'Q9'], ['Q99', '9']]
 '''
     读取file_path.xlsx中指定的sheets
     
@@ -157,6 +157,20 @@ def generate_rand_seq(row, element_set, tmp_df, heads):
         idx, r = next(new_df.iterrows())
         if is_repeat(new_df, tmp_df) or is_Q_equal_0(r) or is_module_less_5(r):
             continue
+
+        # check if problem arr exist
+        is_problematic = False
+        new_arr = new_df.loc[0, :].values.tolist()
+        new_arr = [x for x in new_arr if (isinstance(x, str))]
+        new_arr = [x for x in new_arr if ( '-' in x)]
+        new_arr = [x.split('-')[-1] for x in new_arr]
+        for problem_arr in problem_arrs:
+            if containsUsingSlicing(new_arr, problem_arr):
+                is_problematic = True
+                break
+        if is_problematic:
+            continue
+
         new_df.at[0, '序号'] = new_df.at[0, '序号'] + f'-{letter_dic[i]}'
         i += 1
 
@@ -203,11 +217,22 @@ def generate_new(input_file_path, output_file_path):
 
     constructed_df.to_excel(output_file_path)
 
+def containsUsingSlicing(sequence, element:list):
+    lS, lE = len(sequence), len(element)
+    for i in range(lS - lE + 1):
+        if sequence[i : i+lE] == element: return True
+    return False
+
 
 if __name__ == "__main__":
-    input_file_path = '../testData/XQ版本（慢性）前列腺炎-扩增基础信息表-李慧-20240307.xlsx'
-    output_file_path = '../testData/20240318.xlsx'
+    input_file_path = '心肌梗死扩增基础信息表模板(1).xlsx'
+    output_file_path = '20240318.xlsx'
 
     generate_new(input_file_path, output_file_path)
+
+    # problem_arr = ['99', 'Q9']
+    # checking_arr = ['1', '99', 'Q9', '2', 'Q9']
+    #
+    # print(containsUsingSlicing(checking_arr, problem_arr))
 
 
