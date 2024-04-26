@@ -7,7 +7,7 @@ import pandas as pd
 from CD_generator import generate_CD_final_fix
 
 head = ['label', '序号', 'title', 'A', '正文', '模块1', '模块2', '模块3', '模块4', '模块5', '模块6', '模块7', '模块8', '模块9',
-        '模块10', '模块11', '模块12', '模块13', '模块14', '模块15']
+        '模块10', '模块11', '模块12', '模块13', '模块14', '模块15', '模块16', '模块17', '模块18', '模块19', '模块20']
 def test_file(file_name, B_statis_file, B_module):
     df = pd.DataFrame(columns=head)
     query_df = pd.read_excel(file_name)
@@ -89,4 +89,4 @@ def df_one_CD(sampled_queries, B_module, CD_module):
     return df
 
 if __name__ == '__main__':
-    test_file('DY问题.xlsx', 'B_statis.txt', 'DY')
+    test_file('ZL问题.xlsx', 'B_statis.txt', 'ZL')
