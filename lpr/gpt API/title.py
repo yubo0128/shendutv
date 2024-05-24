@@ -12,7 +12,7 @@ if __name__ == '__main__':
     '''
 
     # gpt-4 is not available for current version
-    completion = openai.ChatCompletion.create(model="gpt-4",
+    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",
                                               messages=[{"role": "user", "content": prompt}])
     print(completion.choices[0].message.content)
 
