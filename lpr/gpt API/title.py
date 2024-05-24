@@ -2,10 +2,13 @@ import openai
 openai.api_key = "YOUR API KEY"
 
 if __name__ == '__main__':
-    question = '低钾血症会导致房颤吗'
+    title = ''
     prompt = f'''
-    请回答问题，“{question}”
-    答案要求：1、第一句话要求直接回答问题，既是回答问题的答案，也能对下面的文字进行概括。2、答案不超过300字。3、答案要求条理清晰，排版最好用一、二、三。
+    {title} \n
+    这是一个标题，我要给它做一个封面，请帮我完成换行操作。
+    换行要求是：1、封面能排列两行内容，每行字数不能超过10个。
+    2、换行后，上下两行居中排列，找出排列最好看的一种
+    3、不要将固定词语分在上下两行内
     '''
 
     # gpt-4 is not available for current version
