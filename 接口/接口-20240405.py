@@ -6,7 +6,6 @@ type：区分开头编码还是收尾模块结束模块  1代表开头  2代表�
 nameCode：延展模块类型比如：ZZ、WH、BY、YY、CB、JC等 示例如下
 '''
 url = "http://online-hc.shendutv.com/prod-api/sdgather/answer/answer-type-list?type=1&nameCode=ZZ"
-
 payload={}
 response = requests.request("GET", url, data=payload)
 data = json.loads(response.text)
@@ -42,3 +41,14 @@ url = "http://online-hc.shendutv.com/prod-api/sdgather/answer/answer-list-all"
 response = requests.request("GET", url, data=payload)
 data = json.loads(response.text)
 print(data['data'])
+
+
+'''
+查询历史数据去重后的query
+'''
+url = "http://online-hc.shendutv.com/prod-api/sdgather/douyinDistinct/list-title?title=什么、前列腺&pageNum=1&pageSize=100"
+response = requests.request("GET", url, data=payload)
+data = json.loads(response.text)
+print(data['total'])
+print(data['rows'])
+
