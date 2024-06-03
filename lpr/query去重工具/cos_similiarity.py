@@ -71,6 +71,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 if __name__ == '__main__':
     from sentence_transformers import SentenceTransformer, util
     import numpy as np
+    import pandas as pd
 
     # List of queries
     queries = [
@@ -85,7 +86,7 @@ if __name__ == '__main__':
 
     # models: multi-qa-mpnet-base-dot-v1, all-mpnet-base-v2
     # Load pre-trained SentenceTransformer model
-    model = SentenceTransformer('multi-qa-mpnet-base-dot-v1')
+    model = SentenceTransformer('all-MiniLM-L6-v2')
 
     # Convert queries to embeddings
     embeddings = model.encode(queries)
@@ -119,8 +120,18 @@ if __name__ == '__main__':
     groups = group_similar_queries(queries, cosine_similarity_matrix, threshold)
 
     # Display the groups
-    for idx, group in enumerate(groups):
-        print(f"Group {idx + 1}: {group}")
+    # for idx, group in enumerate(groups):
+    #     print(f"Group {idx + 1}: {group}")
+
+
+    # Add a "group" prefix with an index to each inner list
+    data_with_group = [['group' + str(index + 1)] + sublist for index, sublist in enumerate(groups)]
+
+    # Create a pandas DataFrame from the modified list of lists
+    df = pd.DataFrame(data_with_group)
+
+    # Save the DataFrame to an Excel file
+    df.to_excel('output_with_groups.xlsx', index=False, header=False, engine='openpyxl')
 
 
 
