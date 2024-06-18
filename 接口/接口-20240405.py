@@ -52,3 +52,13 @@ data = json.loads(response.text)
 print(data['total'])
 print(data['rows'])
 
+
+
+
+'''
+查询肩周炎列表 k:v
+'''
+url = "http://online-hc.shendutv.com/prod-api/sdgather/syntheticModule/readExcle"
+response = requests.request("GET", url, data=payload)
+data = json.loads(response.text)
+print(data['data'])
