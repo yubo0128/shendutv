@@ -43,7 +43,7 @@ random_queries_2000 = random.sample(queries_2000, 500)
 queries_dict_2000 = {i: query for i, query in enumerate(random_queries_2000)}
 
 print('='*25 + 'START ENCODING QUERY' + '='*25)
-query_embeddings_2000 = {key: encode_sentence(value, tokenizer, model) for key, value in queries_dict_2000.items()}
+# query_embeddings_2000 = {key: encode_sentence(value, tokenizer, model) for key, value in queries_dict_2000.items()}
 
 # Match each query from 肾结石X版本-669条.xlsx to the closest queries in the 500 random queries
 results = []
