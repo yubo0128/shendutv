@@ -37,7 +37,7 @@ queries_669 = df_669[['序号', '标题']].to_dict('records')
 
 # Randomly select 500 queries from 肾结石待匹配-2000多条.xlsx
 random.seed(42)
-random_queries_2000 = random.sample(queries_2000, 5)
+random_queries_2000 = random.sample(queries_2000, 500)
 
 # Compute embeddings for the 500 random queries
 queries_dict_2000 = {i: query for i, query in enumerate(random_queries_2000)}
