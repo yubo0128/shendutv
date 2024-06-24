@@ -62,3 +62,14 @@ url = "http://online-hc.shendutv.com/prod-api/sdgather/syntheticModule/readExcle
 response = requests.request("GET", url, data=payload)
 data = json.loads(response.text)
 print(data['data'])
+
+
+'''
+根据版本和病种查询历史query
+参数1：videoUniqueCoding 唯一编码或者搜索病种简拼
+参数2：edition  版本   比如X、X1、XQ
+'''
+url = "http://online-hc.shendutv.com/prod-api/sdgather/syntheticModule/getHistoricalVersion?videoUniqueCoding=JZB&edition=X"
+response = requests.request("GET", url, data=payload)
+data = json.loads(response.text)
+print(data['data'])
