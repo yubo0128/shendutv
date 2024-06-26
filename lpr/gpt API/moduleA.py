@@ -1,5 +1,5 @@
 import openai
-openai.api_key = "API key"
+openai.api_key = "API KEY"
 
 if __name__ == '__main__':
     # 5.24 VERSION
