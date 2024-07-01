@@ -203,7 +203,7 @@ def generate_CD_final_fix(disease, CD):
     return res
 
 if __name__ == '__main__':
-    x = generate_CD('AZB', 'YF-JC')
+    x = generate_CD_final_fix('MXQLXY', 'YY')
     print(x)
 
     # rand = random.choice(list(range(15)))
